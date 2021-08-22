@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>BouncyFlappy</title>
+    <meta
+      name="viewport"
+      content="width=device-width, height=device-height,
+    user-scalable=no, initial-scale=1, maximum-scale=1"
+    />
+    <script src="https://unpkg.com/sounds-some-sounds@1.0.5/build/index.js"></script>
+    <script src="https://unpkg.com/gif-capture-canvas@1.1.0/build/index.js"></script>
+    <script src="https://unpkg.com/terser@4.6.11/dist/bundle.min.js"></script>
+    <script src="https://unpkg.com/pixi.js@5.3.0/dist/pixi.min.js"></script>
+    <script src="https://unpkg.com/pixi-filters@3.1.1/dist/pixi-filters.js"></script>
+    <script>
+      var module = {};
+    </script>
+    <script src="https://unpkg.com/lodash.clonedeep@4.5.0/index.js"></script>
+    <script src="https://abagames.github.io/crisp-game-lib/bundle.js"></script>
+
+<script>
+title = "Bouncy Flappy";
+
+description = `
+  [Tap] funbari
+`;
+
+characters = [
+`
+ yyyy
+rryyw
+ rryy
+ yyyy
+`,
+`
+ yyyy
+ yyyw
+ rryy
+rryyy
+`,
+];
+
+options = {
+  viewSize: { x: 100, y: 100 },
+  theme:"crt",
+  isPlayingBgm: true,
+  isReplayEnabled: true,
+  seed: 2,
+};
+
+var playerY=15;
+const obstacles=[];
+var obstacleX;
+
+const star=[];
+
+var SCROLLSPEED=0.5;
+var vel=1;
+var reverse=1;
+var funbari=0;
+var speedCount=0;
+
+var wallcolor="blue";
+function update() {
+  if (!ticks) {
+    obstacles.length=0;
+    star.length=0;
+    SCROLLSPEED=0.5;
+    speedCount=0;
+
+  }
+  color("light_green");
+  rect(0, 0, 100, 10);
+  rect(0, 90, 100, 100);
+  color("light_blue");
+  rect(0, 10, 100, 80);
+  color("black");
+  
+  if(ticks%(30-funbari*2)<=(15-funbari)){
+    char("a",10,playerY);
+  }else{
+    char("b",10,playerY);
+  }
+
+  if(input.isPressed){
+    vel=0.5;
+    funbari=10;
+  }else{
+    vel=1;
+    funbari=0;
+  }
+  if(playerY>=88.0){
+    reverse=-1;
+  }
+
+  if(playerY<=12.0){
+    reverse=1;
+  }
+  playerY+=vel*reverse;
+
+
+  //障害物
+  
+  obstacles.forEach(e => {
+    if(text("*", e.x, e.y).isColliding.char.a||text("*", e.x, e.y).isColliding.char.b){
+      play("explosion");
+      end();
+    }
+    e.x-=SCROLLSPEED;
+  })
+  //得点
+  star.forEach(e => {
+    if(text("o", e.x, e.y).isColliding.char.a||text("o", e.x, e.y).isColliding.char.b){
+      SCROLLSPEED+=0.1;
+      speedCount+=1;
+      play("coin");
+    }
+    e.x-=SCROLLSPEED;
+  })
+  remove(star,(e) => {
+    if(text("o", e.x, e.y).isColliding.char.a||text("o", e.x, e.y).isColliding.char.b){
+      return true;
+    }
+  });
+  if (ticks %(50-speedCount*5)== 0) {
+    var luck=rndi(3);
+    if(luck==1){
+      star.push(vec(100, rnd(20,80)));
+    }else{
+      obstacles.push(vec(100, rnd(20,80)));
+    }
+
+    addScore(1);
+    
+  }
+}
+
+addEventListener("load", onLoad);
+</script>
+
+  </head>
+  <body style="background: #ddd"></body>
+</html>
