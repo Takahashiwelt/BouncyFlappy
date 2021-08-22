@@ -2,7 +2,7 @@
 ![BouncyFlappy](https://user-images.githubusercontent.com/25281086/130358587-6a29b4f7-c307-40e5-80b0-0c20a15671df.gif)
 
 # Play
-
+https://takahashiwelt.github.io/BouncyFlappy/
 # 解説
 "ふんばり"を駆使して障害物（*）を避けよう。  
 アイテム(o)を取得すると障害物の流れのスピードが上がる。  
